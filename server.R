@@ -11,12 +11,12 @@ shinyServer(
     
     dta<-readRDS("Q:/Shiny Test GGplot/dataset")
     
-output$histogram<-renderPlot({
-  nm<-paste("Percentage of the population income deprived", "2011", sep = " ")
-  working<-dta[names(dta) %in% nm]
-  working<- as.matrix(working)
-  hist(working)
-})
+output$bgraph<-renderPlot({
+  bg_dat<-dta[1:5,c(6,294)]
+  bgraph<-ggplot(data = bg_dat, aes(x = bg_dat[,2], y = bg_dat[,1])
+                )+geom_bar(stat = "identity")
+  bgraph
+  })
 
 output$map<-renderPlot({
   dzs01_map_fort <- readRDS(file = "S:/G - Governance & Performance Mngmt/Research Team/Fire Research/Assessments-Rproject/data/dzs01_fort.rds")
@@ -56,8 +56,7 @@ output$map<-renderPlot({
                                               fill = brks,
                                               group = group),
                  alpha = 0.8, colour = 'grey18', size = 0.15) +
-    scale_fill_manual(name = "% Deprived", values = clrs) +
-    ggtitle("Employment Deprivation 2011") +
+    scale_fill_manual(name = "SIMD Ranking", values = clrs) +
     guides(fill = guide_legend(override.aes = list(colour = NULL))) +
     theme_map() +
     theme(legend.background = element_rect(colour = 'black'),
@@ -74,12 +73,5 @@ output$map<-renderPlot({
   map_abdn_dzs_b
   
 })
-output$sumt<-renderText({
-"This table would contain information on the selected geography such as comparisons 
-with the national, local authority, mmw etc averages/median; highest and lowest values 
-for the indicator and geography on that geography type; plus something like 5 year average?"
-})
-output$dex<-renderText({
-  "Would provide all available stats for the indicators within the selected domain."
-})
+
 })
